@@ -22,7 +22,36 @@ model Home {
   property_type       PropertyType
 }
 
+model Image {
+  id         Int      @id @default(autoincrement())
+  url        String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  name       String
+  phone      String
+  email      String
+  password   String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  user_type  UserType
+}
+
+model Message {
+  id      Int    @id @default(autoincrement())
+  message String
+}
+
 enum PropertyType {
   RESIDENTIAL
   CONDO
+}
+
+enum UserType {
+  BUYER
+  REALTOR
+  ADMIN
 }
