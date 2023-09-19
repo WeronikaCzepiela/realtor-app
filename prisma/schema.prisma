@@ -21,6 +21,8 @@ model Home {
   land_size           Float
   property_type       PropertyType
   images              Image[]
+  created_at          DateTime     @default(now())
+  updated_at          DateTime     @updatedAt
 }
 
 model Image {
