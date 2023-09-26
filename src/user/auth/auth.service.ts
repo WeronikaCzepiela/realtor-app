@@ -1,52 +1,55 @@
-import {ConflictException, Injectable} from '@nestjs/common';
-import {PrismaService} from "../../prisma/prisma.service";
-import * as bcrypt from "bcryptjs"
-import * as jwt from 'jsonwebtoken'
-import {UserType} from "@prisma/client";
-import * as process from "process";
+import { ConflictException, Injectable } from '@nestjs/common';
+import { PrismaService } from '../../prisma/prisma.service';
+import * as bcrypt from 'bcryptjs';
+import * as jwt from 'jsonwebtoken';
+import { UserType } from '@prisma/client';
+import * as process from 'process';
 
 interface SignupParams {
-    email: string;
-    password: string;
-    name: string;
-    phone: string
+  email: string;
+  password: string;
+  name: string;
+  phone: string;
 }
 
 @Injectable()
 export class AuthService {
-    constructor(private readonly prismaService: PrismaService) {
+  constructor(private readonly prismaService: PrismaService) {}
+
+  async signup({ email, password, name, phone }: SignupParams) {
+    const userExists = await this.prismaService.user.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    if (userExists) {
+      throw new ConflictException();
     }
 
-    async signup({email, password, name, phone}: SignupParams) {
-        const userExists = await this.prismaService.user.findUnique({
-            where: {
-                email
-            }
-        })
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-        if (userExists) {
-            throw new ConflictException()
-        }
+    const user = await this.prismaService.user.create({
+      data: {
+        email,
+        name,
+        phone,
+        password: hashedPassword,
+        user_type: UserType.BUYER,
+      },
+    });
 
-        const hashedPassword = await bcrypt.hash(password, 10)
+    const token = jwt.sign(
+      {
+        name,
+        id: user.id,
+      },
+      process.env.JSON_TOKEN_KEY,
+      {
+        expiresIn: 3600,
+      },
+    );
 
-        const user = await this.prismaService.user.create({
-            data: {
-                email,
-                name,
-                phone,
-                password: hashedPassword,
-                user_type: UserType.BUYER
-            }
-        });
-
-        const token = await jwt.sign({
-            name,
-            id: user.id
-        }, process.env.JSON_TOKEN_KEY, {
-            expiresIn: 3600
-        })
-
-        return {token}
-    }
+    return { token };
+  }
 }
