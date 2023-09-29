@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, HttpException } from '@nestjs/common';
+import { ConflictException, HttpException, Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
@@ -80,5 +80,11 @@ export class AuthService {
         expiresIn: 3600000,
       },
     );
+  }
+
+  async generateProductKey(email: string, userType: UserType) {
+    const string = `${email}-${userType}-${process.env.PRODUCT_KEY_SECRET}`;
+
+    return bcrypt.hash(string, 10);
   }
 }
