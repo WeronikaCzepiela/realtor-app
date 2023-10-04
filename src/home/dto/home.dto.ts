@@ -3,7 +3,8 @@ import { Exclude, Expose } from 'class-transformer';
 
 export class HomeResponseDto {
   id: number;
-  address: string;
+  adres: string;
+  image: string;
 
   @Exclude()
   number_of_bedrooms: number;
