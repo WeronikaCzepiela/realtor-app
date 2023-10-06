@@ -31,6 +31,6 @@ export class HomeController {
     return {};
   }
 
-  @Delete()
+  @Delete(':id')
   deleteHome() {}
 }
