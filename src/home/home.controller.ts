@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Post, Put, Query } from '@nestjs/common';
+Kimport { Controller, Delete, Get, Post, Put, Query } from '@nestjs/common';
 import { HomeService } from './home.service';
 import { HomeResponseDto } from './dto/home.dto';
 import { PropertyType } from '@prisma/client';
