@@ -15,6 +15,7 @@ interface GetHomesParam {
 @Injectable()
 export class HomeService {
   constructor(private readonly prismaService: PrismaService) {}
+
   async getHomes(filter: GetHomesParam): Promise<HomeResponseDto[]> {
     const homes = await this.prismaService.home.findMany({
       select: {
@@ -38,6 +39,7 @@ export class HomeService {
     if (!homes.length) {
       throw new NotFoundException();
     }
+
     return homes.map((home) => {
       const fetchHome = { ...home, image: home.images[0].url };
       delete fetchHome.images;
