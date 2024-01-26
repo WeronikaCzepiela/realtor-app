@@ -1,22 +1,6 @@
 
-## Running the app
+## Realtor App 
 
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Test
-
-```bash
-# unit tests
-
-```
+This application is about 
 
 
